@@ -1,7 +1,50 @@
-const App = () => {
-  return (
-    <div className=''>App</div>
-  )
-}
+import { useEffect, useState } from "react";
+import Chat from "./components/Chat";
+import Details from "./components/Details";
+import Lists from "./components/Lists";
+import Login from "./components/Login";
+import Notification from "./components/Notification";
+import { useUser } from "./context/userContext";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./lib/firebase";
 
-export default App
+const App = () => {
+  
+  const [isDetailsVisible, setIsDetailsVisible] = useState(false);
+  const [isChatListVisible, setIsChatListVisible] = useState(true);
+
+  const { loading, currentUser, fetchUserInfo, chatId, setChatId } = useUser();
+
+ 
+  useEffect(() => {
+    const unSub = onAuthStateChanged(auth, (user) => {
+      fetchUserInfo(user?.uid);
+    });
+    return () => {
+      unSub();
+    };
+  }, []);
+
+  if (loading)
+    return (
+      <div className="text-4xl font-semibold text-gray-950 p-6 rounded-md bg-white/35">
+        loading...
+      </div>
+    );
+  return (
+    <div className="h-[95%] my-3 lg:h-[90vh] md:h-[80%] w-full md:w-[90%] lg:w-[80%] backdrop-blur-[20px] bg-[#111928bf] saturate-150 rounded-md border border-[#fff]/25 flex   text-white relative md:static lg:static overflow-hidden mx-1">
+      {currentUser ? (
+        <>
+          {<Lists isChatListVisible={isChatListVisible} setIsChatListVisible={setIsChatListVisible} />}
+          {chatId && <Chat isChatListVisible={isChatListVisible} setIsChatListVisible={setIsChatListVisible} setIsDetailsVisible={setIsDetailsVisible} />}
+          {chatId && <Details isDetailsVisible={isDetailsVisible} setIsDetailsVisible={setIsDetailsVisible}/>}
+        </>
+      ) : (
+        <Login />
+      )}
+      <Notification />
+    </div>
+  );
+};
+
+export default App;
