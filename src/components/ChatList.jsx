@@ -64,7 +64,7 @@ export default function ChatList({setIsChatListVisible}) {
     <div ref={chatList}>
       <div className="flex justify-between items-center gap-4 p-3">
         <div className="flex bg-slate-950/50 justify-center items-center rounded-md px-2 w-full">
-          <img className="size-5" src="/search.png" alt="" />
+          <img className="size-5" src="./search.png" alt="" />
           <input
             className="bg-transparent outline-none w-full px-2 py-2 lg:py-1"
             type="text"
@@ -75,7 +75,7 @@ export default function ChatList({setIsChatListVisible}) {
         </div>
         <img
           className="size-8 p-2 rounded-md cursor-pointer bg-slate-950/50"
-          src={addIcon ? "../../public/minus.png" : "../../public/plus.png"}
+          src={addIcon ? ".minus.png" : "./plus.png"}
           alt="addIcon"
           onClick={() => setAddIcon(!addIcon)}
         />

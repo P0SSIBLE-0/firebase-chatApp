@@ -259,7 +259,7 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
         <div className="relative">
           <img
             className="size-5 cursor-pointer"
-            src="../../public/emoji.png"
+            src="./emoji.png"
             onClick={() => setOpen(!open)}
             alt="emoji"
           />

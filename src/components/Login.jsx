@@ -114,8 +114,8 @@ const Login = () => {
           <div className="flex items-center gap-1">
             <label htmlFor="file">
               <img
-                className="size-12 rounded-full bg-cover"
-                src={avatar.url || "../../public/avatar.png"}
+                className="size-12 rounded-full bg-cover cursor-pointer"
+                src={avatar.url || "./avatar.png"}
                 alt=""
               />
               Upload an image

@@ -67,7 +67,7 @@ export const UserProvider = ({ children }) => {
   }
 
   const changeBlock = () => {
-    setIsRecUserBloacked(!isRecUserBloacked);
+    setIsRecUserBloacked(prev => !prev);
   }
 
   const contextValue = {
@@ -81,7 +81,6 @@ export const UserProvider = ({ children }) => {
     user,
     isCurrUserBloacked,
     isRecUserBloacked,
-    changeBlock
   };
 
   return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;

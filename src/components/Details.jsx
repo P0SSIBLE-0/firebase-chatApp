@@ -64,19 +64,19 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
           <div className="">
             <div className="flex justify-between items-center">
               <span className="">chat settings</span>
-              <img className="size-4" src="../../public/arrowUp.png" alt="" />
+              <img className="size-4" src="./arrowUp.png" alt="" />
             </div>
           </div>
           <div className="">
             <div className="flex justify-between items-center">
               <span className="">chat settings</span>
-              <img className="size-4" src="../../public/arrowUp.png" alt="" />
+              <img className="size-4" src="./arrowUp.png" alt="" />
             </div>
           </div>
           <div>
             <div className="flex justify-between items-center">
               <span>Privacy & help</span>
-              <img className="size-4" src="../../public/arrowUp.png" alt="" />
+              <img className="size-4" src="./arrowUp.png" alt="" />
             </div>
           </div>
           <div>
@@ -84,7 +84,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
               <span>shared photos</span>
               <img
                 className="size-4 rounded-md"
-                src="../../public/arrowUp.png"
+                src="./arrowUp.png"
                 alt=""
               />
             </div>
@@ -100,7 +100,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
                 </div>
                 <img
                   className="size-5"
-                  src="../../public/download.png"
+                  src="./download.png"
                   alt=""
                 />
               </div>
@@ -115,7 +115,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
                 </div>
                 <img
                   className="size-5"
-                  src="../../public/download.png"
+                  src="./download.png"
                   alt=""
                 />
               </div>
@@ -130,7 +130,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
                 </div>
                 <img
                   className="size-5"
-                  src="../../public/download.png"
+                  src="./download.png"
                   alt=""
                 />
               </div>
@@ -139,7 +139,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
           <div>
             <div className="flex justify-between items-center">
               <span>shared files</span>
-              <img className="size-4" src="../../public/arrowUp.png" alt="" />
+              <img className="size-4" src="./arrowUp.png" alt="" />
             </div>
           </div>
           <button
@@ -151,7 +151,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
               : isRecUserBloacked
               ? "User blocked"
               : "Block user"}
-              {console.log(chatId)}
+              {console.log("isRecUserbloacked: " + isRecUserBloacked + " " + '\n' + 'isCurrUserBloacked: ' + isCurrUserBloacked )}
           </button>
           <button
             className="p-2 bg-indigo-500 rounded-md"
