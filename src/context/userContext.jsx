@@ -14,7 +14,6 @@ export const UserProvider = ({ children }) => {
   const [isCurrUserBloacked, setIsCurrUserBloacked] = useState(null);
   const [isRecUserBloacked, setIsRecUserBloacked] = useState(null);
 
-
   const fetchUserInfo = async (uid) => {
     setLoading(true);
     if (!uid) {
@@ -39,36 +38,34 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-
-  const changeChat = async(chatId, user) => {
+  const changeChat = async (chatId, user) => {
     if (!user || !currentUser) return;
-    
-    // check if current user is blocked 
-    if(user.blocked.includes(currentUser.id)){
+
+    // check if current user is blocked
+    if (user.blocked.includes(currentUser.id)) {
       setUser(user);
       setChatId(chatId);
       setIsCurrUserBloacked(true);
       setIsRecUserBloacked(false);
     }
     // check if receiver is blocked
-    else if(currentUser.blocked.includes(user.id)){
+    else if (currentUser.blocked.includes(user.id)) {
       setUser(user);
       setChatId(chatId);
       setIsCurrUserBloacked(false);
       setIsRecUserBloacked(true);
-    }else{
-      setChatId(chatId)
+    } else {
+      setChatId(chatId);
       setUser(user);
       setIsCurrUserBloacked(false);
       setIsRecUserBloacked(false);
     }
     return;
-
-  }
+  };
 
   const changeBlock = () => {
-    setIsRecUserBloacked(prev => !prev);
-  }
+    setIsRecUserBloacked((prev) => !prev);
+  };
 
   const contextValue = {
     loading,
@@ -83,7 +80,9 @@ export const UserProvider = ({ children }) => {
     isRecUserBloacked,
   };
 
-  return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
+  );
 };
 
 // Custom hook to use the UserContext

@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { auth, db } from "../lib/firebase";
 import { useUser } from "../context/userContext";
 import { updateDoc, doc, arrayRemove, arrayUnion } from "firebase/firestore";
 
-function Details({isDetailsVisible, setIsDetailsVisible}) {
+function Details({ isDetailsVisible, setIsDetailsVisible }) {
   const {
     currentUser,
     user,
     isCurrUserBloacked,
     isRecUserBloacked,
     changeBlock,
-    chatId
+    changeChat,
+    chatId,
   } = useUser();
 
   const handleBlock = async () => {
@@ -19,32 +20,38 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
     const userDocRef = doc(db, "users", currentUser.id);
     try {
       await updateDoc(userDocRef, {
-        blocked: isRecUserBloacked ? arrayRemove(user.id) : arrayUnion(user.id),
+        blocked: currentUser.blocked.includes(user.id)
+          ? arrayRemove(user.id)
+          : arrayUnion(user.id),
       });
+
       changeBlock();
     } catch (error) {
       console.log("Error updating block status: ", error);
     }
   };
-
   return (
-    <div className={`w-full lg:w-80 overflow-y-auto hide-scroll flex-shrink-0 absolute top-0 duration-200  ${isDetailsVisible ? 'translate-x-0 bg-[#111]': 'translate-x-full'} z-10  h-full lg:static md:static md:translate-x-full lg:bg-transparent lg:right-0 lg:translate-x-0 `}>
+    <div
+      className={`w-full lg:w-80 overflow-y-auto hide-scroll flex-shrink-0 absolute top-0 duration-200  ${
+        isDetailsVisible ? "right-0 bg-[#111]" : "-right-[100%]"
+      } z-10  h-full lg:static  lg:bg-transparent lg:right-0 lg:translate-x-0 md:w-[40%]`}
+    >
       <div className="py-5 px-2">
-      <svg
-            onClick={() => setIsDetailsVisible(!isDetailsVisible)}
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="size-7 mx-5 mt-2 lg:hidden"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 19.5 8.25 12l7.5-7.5"
-            />
-          </svg>
+        <svg
+          onClick={() => setIsDetailsVisible(!isDetailsVisible)}
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="size-7 mx-5 mt-2 lg:hidden"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
         <div className="flex flex-col gap-2 items-center border-b border-white/25 py-3">
           <img
             className="size-16 rounded-full"
@@ -67,12 +74,6 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
               <img className="size-4" src="./arrowUp.png" alt="" />
             </div>
           </div>
-          <div className="">
-            <div className="flex justify-between items-center">
-              <span className="">chat settings</span>
-              <img className="size-4" src="./arrowUp.png" alt="" />
-            </div>
-          </div>
           <div>
             <div className="flex justify-between items-center">
               <span>Privacy & help</span>
@@ -80,13 +81,9 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
             </div>
           </div>
           <div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mb-2">
               <span>shared photos</span>
-              <img
-                className="size-4 rounded-md"
-                src="./arrowUp.png"
-                alt=""
-              />
+              <img className="size-4 rounded-md" src="./arrowUp.png" alt="" />
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -98,11 +95,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
                   />
                   <span>photo_233_e.png</span>
                 </div>
-                <img
-                  className="size-5"
-                  src="./download.png"
-                  alt=""
-                />
+                <img className="size-5" src="./download.png" alt="" />
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex gap-3 items-center">
@@ -113,11 +106,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
                   />
                   <span>photo_233_e.png</span>
                 </div>
-                <img
-                  className="size-5"
-                  src="./download.png"
-                  alt=""
-                />
+                <img className="size-5" src="./download.png" alt="" />
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex gap-3 items-center">
@@ -128,11 +117,7 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
                   />
                   <span>photo_233_e.png</span>
                 </div>
-                <img
-                  className="size-5"
-                  src="./download.png"
-                  alt=""
-                />
+                <img className="size-5" src="./download.png" alt="" />
               </div>
             </div>
           </div>
@@ -149,9 +134,16 @@ function Details({isDetailsVisible, setIsDetailsVisible}) {
             {isCurrUserBloacked
               ? "You are Blocked!"
               : isRecUserBloacked
-              ? "User blocked"
+              ? "Unblock user"
               : "Block user"}
-              {console.log("isRecUserbloacked: " + isRecUserBloacked + " " + '\n' + 'isCurrUserBloacked: ' + isCurrUserBloacked )}
+            {console.log(
+              "isRecUserbloacked: " +
+                isRecUserBloacked +
+                " " +
+                "\n" +
+                "isCurrUserBloacked: " +
+                isCurrUserBloacked
+            )}
           </button>
           <button
             className="p-2 bg-indigo-500 rounded-md"

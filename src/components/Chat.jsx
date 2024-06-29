@@ -11,7 +11,11 @@ import { db } from "../lib/firebase";
 import { useUser } from "../context/userContext";
 import upload from "../lib/upload";
 
-export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChatListVisible }) {
+export default function Chat({
+  setIsDetailsVisible,
+  isChatListVisible,
+  setIsChatListVisible,
+}) {
   const [open, setOpen] = useState(false);
   const [chat, setChat] = useState();
   const [text, setText] = useState("");
@@ -20,8 +24,14 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
     url: "",
   });
   const endRef = useRef(null);
-  const { currentUser, chatId, user, isCurrUserBloacked, isRecUserBloacked } =
-    useUser();
+  const {
+    currentUser,
+    chatId,
+    user,
+    isCurrUserBloacked,
+    isRecUserBloacked,
+    loading,
+  } = useUser();
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,24 +63,24 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
   function timeAgo(timestamp) {
     const now = new Date();
     const secondsPast = Math.floor((now.getTime() - timestamp) / 1000);
-  
+
     if (secondsPast < 60) {
-      return `${secondsPast} sec${secondsPast > 1 ? 's' : ''} ago`;
+      return `${secondsPast} sec${secondsPast > 1 ? "s" : ""} ago`;
     } else if (secondsPast < 3600) {
       const minutes = Math.floor(secondsPast / 60);
-      return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+      return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
     } else if (secondsPast < 86400) {
       const hours = Math.floor(secondsPast / 3600);
-      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
     } else if (secondsPast < 2592000) {
       const days = Math.floor(secondsPast / 86400);
-      return `${days} day${days > 1 ? 's' : ''} ago`;
+      return `${days} day${days > 1 ? "s" : ""} ago`;
     } else if (secondsPast < 31536000) {
       const months = Math.floor(secondsPast / 2592000);
-      return `${months} month${months > 1 ? 's' : ''} ago`;
+      return `${months} month${months > 1 ? "s" : ""} ago`;
     } else {
       const years = Math.floor(secondsPast / 31536000);
-      return `${years} year${years > 1 ? 's' : ''} ago`;
+      return `${years} year${years > 1 ? "s" : ""} ago`;
     }
   }
 
@@ -127,9 +137,9 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
 
   return (
     <div
-      className={`lg:flex-1  md:flex-1  flex flex-col border border-x border-white/25 h-full absolute top-0 ${
-        isChatListVisible ? "translate-x-full" : "translate-x-0"
-      } lg:translate-x-0 lg:static lg:max-w-[620px] lg:min-w-[550px] md:left-[41%]`}
+      className={`lg:flex-[2_2_0%]  md:flex-[2_2_0%]  flex flex-col border border-x border-white/25 w-full h-full absolute top-0 ${
+        isChatListVisible ? "-right-[100%]" : "right-0"
+      } lg:translate-x-0 lg:static lg:max-w-[620px] lg:min-w-[550px] lg:min-w-[480px] md:static md:w-full`}
     >
       <div className="border-b border-white/25 pb-2 flex justify-between items-center p-4">
         <div className="flex gap-2 md:gap-4 lg:gap-4 items-center">
@@ -140,7 +150,7 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="size-6 cursor-pointer lg:hidden"
+            className="size-6 cursor-pointer lg:hidden md:hidden"
           >
             <path
               strokeLinecap="round"
@@ -175,50 +185,75 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
       </div>
 
       <div className="flex-1 flex flex-col border-b border-white/25 p-2 overflow-y-auto relative">
-        {chat?.messages.map((message) =>
-          message.senderId === currentUser.id ? (
-            //sender's side chat messages are displayed here.
-            <div className="max-w-[70%] flex-end self-end" key={message.createdAt}>
-              {message.img && (
-                <img
-                  className="w-full h-60 rounded-md my-1"
-                  src={message.img}
-                  alt=""
-                />
-              )}
-              <div>
-                <p className="p-2 bg-indigo-400 rounded-md rounded-tr-none">
-                  {message.text}
-                </p>
-                <span className="text-xs text-slate-300">{timeAgo(message.createdAt)}</span>
-              </div>
+        {loading ? (
+          <div className="max-w-[70%] flex-end self-end">
+            <span className="w-full md:h-56 aspect-video rounded-md my-1 animate-pulse"></span>
+            <div>
+              <p className="p-2 bg-slate-400 rounded-md rounded-tr-none animte-pulse"></p>
+              <span className="text-xs text-slate-300 animate-pulse"></span>
             </div>
-          ) : (
-            // receiver's side chat messages are displayed
-            <div className="flex gap-2 max-w-[70%] p-2" key={message.createdAt}>
-              <img
-                className="size-10 rounded-full bg-cover"
-                src={
-                  user.blocked.includes(currentUser.id)
-                    ? "./avatar.png"
-                    : user?.avatar || "./avatar.png"
-                }
-                alt=""
-              />
-              <div className="w-full">
+          </div>
+        ) : chat?.messages.length > 0 ? (
+          chat.messages.map((message) =>
+            message.senderId === currentUser.id ? (
+              // Sender's side chat messages
+              <div
+                className="max-w-[70%] flex-end self-end"
+                key={message.createdAt}
+              >
                 {message.img && (
                   <img
-                    className="w-full h-56 rounded-md my-1"
+                    className="w-full md:h-56 aspect-video rounded-md my-1"
                     src={message.img}
                     alt=""
                   />
                 )}
-                <p className="bg-slate-950/35 p-2 rounded-md">{message.text}</p>
-                <span className="text-xs text-slate-300">{timeAgo(message.createdAt)}</span>
+                <div>
+                  <p className="p-2 bg-indigo-400 rounded-md rounded-tr-none">
+                    {message.text}
+                  </p>
+                  <span className="text-xs text-slate-300">
+                    {timeAgo(message.createdAt)}
+                  </span>
+                </div>
               </div>
-            </div>
+            ) : (
+              // Receiver's side chat messages
+              <div
+                className="flex gap-2 max-w-[80%] p-2"
+                key={message.createdAt}
+              >
+                <img
+                  className="size-8 rounded-full bg-cover"
+                  src={
+                    user.blocked.includes(currentUser.id)
+                      ? "./avatar.png"
+                      : user?.avatar || "./avatar.png"
+                  }
+                  alt=""
+                />
+                <div className="">
+                  {message.img && (
+                    <img
+                      className="w-full md:h-56 aspect-video rounded-md my-1"
+                      src={message.img}
+                      alt=""
+                    />
+                  )}
+                  <p className="bg-slate-950/35 p-2 rounded-md">
+                    {message.text}
+                  </p>
+                  <span className="text-xs text-slate-300">
+                    {timeAgo(message.createdAt)}
+                  </span>
+                </div>
+              </div>
+            )
           )
+        ) : (
+          <div className="text-center text-gray-500">No messages yet.</div>
         )}
+
         {img.url && (
           <div className="fixed left-2 bottom-[4.5rem] lg:bottom-16 lg:left-[320px]">
             <img
@@ -231,7 +266,7 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
         <div ref={endRef}></div>
       </div>
 
-      <div className="flex justify-between p-3 items-center gap-3 md:gap-5 lg:gap-5">
+      <div className="flex justify-between p-3 items-center gap-3 md:gap-5 lg:gap-5 relative">
         <div className="flex *:size-5 gap-2 *:cursor-pointer">
           <label htmlFor="file">
             <img src="./img.png" alt="" />
@@ -256,15 +291,19 @@ export default function Chat({ setIsDetailsVisible, isChatListVisible, setIsChat
           }
           disabled={isCurrUserBloacked || isRecUserBloacked}
         />
-        <div className="relative">
+        <div className="">
           <img
             className="size-5 cursor-pointer"
             src="./emoji.png"
             onClick={() => setOpen(!open)}
             alt="emoji"
           />
-          <div className="absolute bottom-14 left-0">
-            <EmojiPicker open={open} onEmojiClick={handleClick} />
+          <div className="absolute bottom-[4rem] right-4">
+            <EmojiPicker
+              style={{ width: "290px", height: "380px" }}
+              open={open}
+              onEmojiClick={handleClick}
+            />
           </div>
         </div>
         <button
