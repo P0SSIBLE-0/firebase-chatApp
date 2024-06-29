@@ -63,6 +63,7 @@ export default function ChatList({ setIsChatListVisible }) {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
+      console.log(chat.user);
     } catch (error) {
       console.log(error);
     }

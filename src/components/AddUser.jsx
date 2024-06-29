@@ -16,7 +16,7 @@ import { useUser } from "../context/userContext";
 
 function AddUser() {
   const [user, setUser] = useState(null);
-  const { currentUser, chatId } = useUser();
+  const { currentUser } = useUser();
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ function AddUser() {
       // Update the user's chats
       await updateDoc(doc(userChatRef, user.id), {
         chats: arrayUnion({
-          chatId: chatId,
+          chatId: newChatRef.id,
           lastMessage: "",
           receiverId: currentUser.id,
           updatedAt: Date.now(),
@@ -60,7 +60,7 @@ function AddUser() {
       // Update the current user's chats
       await updateDoc(doc(userChatRef, currentUser.id), {
         chats: arrayUnion({
-          chatId: chatId,
+          chatId: newChatRef.id,
           lastMessage: "",
           receiverId: user.id,
           updatedAt: Date.now(),

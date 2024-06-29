@@ -44,13 +44,15 @@ const Login = () => {
     const { username, email, password } = Object.fromEntries(formData);
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
-      const imgUrl = await upload(avatar.file)
+      let imgUrl = null;
+      if(avatar.file){
+        imgUrl = await upload(avatar.file)
+      }
 
       await setDoc(doc(db, "users", res.user.uid), {
         username,
         email,
-        avatar: imgUrl,
+        avatar: imgUrl ? imgUrl :"https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3R5MTA2bTB0cGN0anFyd3pubHB1YmNmZzJ3eXJlYWdzazBmeWxsbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZXkraFrlIW1D25M6ZJ/giphy.webp",
         id: res.user.uid,
         blocked: [],
       });
@@ -58,7 +60,7 @@ const Login = () => {
         chats: []
       });
 
-      toast.success("Account created successfully")
+      toast.success("Account created successfully");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
