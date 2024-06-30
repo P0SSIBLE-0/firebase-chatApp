@@ -146,7 +146,8 @@ export default function ChatList({ setIsChatListVisible }) {
           onClick={() => setAddIcon(!addIcon)}
         />
       </div>
-      <div className="h-full overflow-y-auto">
+      <div
+      className="h-[81%] overflow-y-auto hide-scroll">
         {loading
           ? filteredUserChat.map(() => (
               <div className="border-b-2 border-white/25 m-2 p-3 max-w-sm w-full mx-auto">

@@ -24,7 +24,7 @@ function AddUser({setAddIcon}) {
     const username = formData.get("username");
     try {
       const userRef = collection(db, "users");
-      const q = query(userRef, where("username", "==", username));
+      const q = query(userRef, where("username", "==", username.trim()));
 
       const querySnapShot = await getDocs(q);
       if (!querySnapShot.empty) {
@@ -73,10 +73,10 @@ function AddUser({setAddIcon}) {
   };
 
   return (
-    <div className="p-6 h-40 m-auto bg-black/75 rounded-md z-10 flex flex-col justify-center lg:w-96 md:w-96 lg:abolute lg:w-fit lg:h-fit mx-auto">
+    <div className="px-4 py-5 h-40 m-auto bg-gray-950/80 rounded-md z-10 flex flex-col justify-center w-96 md:w-96 absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 h-fit mx-auto w-[90%] lg:w-[400px] md:w-[420px]" tabIndex="-1">
       <form className="w-full flex justify-between" onSubmit={handleSearch}>
         <input
-          className="py-2 px-1 md:p-2 lg:p-2 bg-white text-black rounded-md outline-none mx-2 w-full"
+          className="py-2 px-1 md:p-2 lg:p-2 bg-white text-black rounded-md outline-none mr-2 w-full"
           type="text"
           name="username"
           placeholder="Username"
