@@ -3,8 +3,17 @@ import { useUser } from "../context/userContext";
 import { auth } from "../lib/firebase";
 
 export default function UserInfo() {
-  const { currentUser } = useUser();
+  const {setCurrentUser, currentUser , setChatId, setUser} = useUser();
 
+
+  const handleSignOut = () => {
+    auth.signOut();
+
+    // resetting all states to default
+    setCurrentUser(null)
+    setUser(null);
+    setChatId(null);
+  }
   return (
     <div className=" flex justify-between items-center p-5 ">
       <div className="inline-flex items-center gap-4">
@@ -16,10 +25,9 @@ export default function UserInfo() {
         <h2 className="text-lg font-semibold">{currentUser.username}</h2>
       </div>
       <div className="flex *:size-5 items-center gap-2 *:cursor-pointer">
-        <div>
+        <div onClick={handleSignOut}>
           <svg
-             onClick={() => auth.signOut()}
-             title={'Sign Out'}
+            title={'Sign Out'}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

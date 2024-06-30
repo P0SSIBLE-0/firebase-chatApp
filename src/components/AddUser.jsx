@@ -14,7 +14,7 @@ import { db } from "../lib/firebase";
 import { useState } from "react";
 import { useUser } from "../context/userContext";
 
-function AddUser() {
+function AddUser({setAddIcon}) {
   const [user, setUser] = useState(null);
   const { currentUser } = useUser();
 
@@ -66,6 +66,7 @@ function AddUser() {
           updatedAt: Date.now(),
         }),
       });
+      setAddIcon(false);
     } catch (error) {
       console.log(error);
     }

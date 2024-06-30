@@ -59,8 +59,9 @@ const Login = () => {
       await setDoc(doc(db, "userchats", res.user.uid), {
         chats: []
       });
-
+      handleLogin(e);
       toast.success("Account created successfully");
+      
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -72,8 +73,8 @@ const Login = () => {
   return (
     <div className="flex h-full w-full justify-center items-center py-4">
     {/* Left side - Login form */}
-    <div className={`max-w-[450px] mx-auto sm:w-1/2 p-8 flex flex-col justify-center ${isLogin ? '' : 'hidden'} sm:block`}>
-      <h2 className="text-white text-4xl mb-6 text-center">Welcome back!</h2>
+    <div className={`max-w-[420px] mx-auto sm:w-1/2 p-8 flex flex-col justify-center ${isLogin ? '' : 'hidden'} sm:block`}>
+      <h2 className="text-white text-4xl mb-6 text-center font-semibold">Welcome back!</h2>
       <form className="space-y-6" onSubmit={handleLogin}>
         <div>
           <label htmlFor="loginEmail" className="text-sm">Email</label>
@@ -110,7 +111,7 @@ const Login = () => {
 
     {/* Right side - Register form */}
     <div className={`max-w-[450px] mx-auto sm:w-1/2 p-8 flex flex-col justify-center text-white ${isLogin ? 'hidden' : ''} sm:block`}>
-      <h2 className="text-4xl text-center mb-6">Register</h2>
+      <h2 className="text-4xl text-center mb-6 font-semibold">Register</h2>
       <form className="space-y-6" onSubmit={handleRegister}>
         <div className="flex flex-col items-center justify-center gap-1 ">
           <label className="inline-flex flex-col items-center justify-center cursor-pointer" htmlFor="file">

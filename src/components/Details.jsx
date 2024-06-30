@@ -10,8 +10,9 @@ function Details({ isDetailsVisible, setIsDetailsVisible }) {
     isCurrUserBloacked,
     isRecUserBloacked,
     changeBlock,
-    changeChat,
-    chatId,
+    setCurrentUser,
+    setUser,
+    setChatId
   } = useUser();
 
   const handleBlock = async () => {
@@ -30,6 +31,15 @@ function Details({ isDetailsVisible, setIsDetailsVisible }) {
       console.log("Error updating block status: ", error);
     }
   };
+
+  const handleSignOut = () => {
+    auth.signOut();
+
+    // resetting all states to default
+    setCurrentUser(null)
+    setUser(null);
+    setChatId(null);
+  }
   return (
     <div
       className={`w-full lg:w-80 overflow-y-auto hide-scroll flex-shrink-0 absolute top-0 duration-200  ${
@@ -136,18 +146,10 @@ function Details({ isDetailsVisible, setIsDetailsVisible }) {
               : isRecUserBloacked
               ? "Unblock user"
               : "Block user"}
-            {console.log(
-              "isRecUserbloacked: " +
-                isRecUserBloacked +
-                " " +
-                "\n" +
-                "isCurrUserBloacked: " +
-                isCurrUserBloacked
-            )}
           </button>
           <button
             className="p-2 bg-indigo-500 rounded-md"
-            onClick={() => auth.signOut()}
+            onClick={handleSignOut}
           >
             logout
           </button>

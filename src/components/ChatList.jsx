@@ -18,7 +18,7 @@ export default function ChatList({ setIsChatListVisible }) {
 
   const [chats, setChats] = useState([]);
   const [input, setInput] = useState("");
-  const { currentUser, changeChat, user, loading } = useUser();
+  const { currentUser, changeChat, user, loading , setChatId} = useUser();
   const chatList = useRef(null);
 
   useEffect(() => {
@@ -63,13 +63,14 @@ export default function ChatList({ setIsChatListVisible }) {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
-      console.log(chat.user);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleRemoveUser = async (user, chat) => {
+  const handleRemoveUser = async (user, chat, e) => {
+    e.stopPropagation();
+
     if (!user || !user.id || !currentUser.id) {
       console.error("Invalid user or currentUser data");
       return;
@@ -119,6 +120,7 @@ export default function ChatList({ setIsChatListVisible }) {
       await deleteDoc(doc(chatRef, chatId));
 
       toast.success("Chat deleted successfully!");
+      setChatId(null);
     } catch (error) {
       console.error("Error removing user from chat list: ", error);
     }
@@ -191,7 +193,7 @@ export default function ChatList({ setIsChatListVisible }) {
               </div>
               <button
                 className="hover:text-red-500"
-                onClick={() => handleRemoveUser(user, chat)}
+                onClick={(e) => handleRemoveUser(user, chat, e)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +212,7 @@ export default function ChatList({ setIsChatListVisible }) {
               </button>
             </div>
           ))}
-      {addIcon && <AddUser />}
+      {addIcon && <AddUser setAddIcon={setAddIcon} />}
     </div>
   );
 }

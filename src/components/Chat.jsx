@@ -60,28 +60,27 @@ export default function Chat({
     }
   };
 
-  function timeAgo(timestamp) {
-    const now = new Date();
-    const secondsPast = Math.floor((now.getTime() - timestamp) / 1000);
-
-    if (secondsPast < 60) {
-      return `${secondsPast} sec${secondsPast > 1 ? "s" : ""} ago`;
-    } else if (secondsPast < 3600) {
-      const minutes = Math.floor(secondsPast / 60);
-      return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
-    } else if (secondsPast < 86400) {
-      const hours = Math.floor(secondsPast / 3600);
-      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    } else if (secondsPast < 2592000) {
-      const days = Math.floor(secondsPast / 86400);
-      return `${days} day${days > 1 ? "s" : ""} ago`;
-    } else if (secondsPast < 31536000) {
-      const months = Math.floor(secondsPast / 2592000);
-      return `${months} month${months > 1 ? "s" : ""} ago`;
-    } else {
-      const years = Math.floor(secondsPast / 31536000);
-      return `${years} year${years > 1 ? "s" : ""} ago`;
-    }
+  function formatChatTime(timestamp) {
+    const date = new Date(timestamp);
+  
+    // Get hours and minutes
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+  
+    // Determine AM/PM
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+  
+    // Convert hours from 24-hour time to 12-hour time
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+  
+    // Format minutes to be two digits
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+  
+    // Combine into a formatted string
+    const formattedTime = `${hours}:${formattedMinutes} ${ampm}`;
+  
+    return formattedTime;
   }
 
   // sending messages to the server (firebase ) and updating in realtime
@@ -213,7 +212,7 @@ export default function Chat({
                     {message.text}
                   </p>
                   <span className="text-xs text-slate-300">
-                    {timeAgo(message.createdAt)}
+                    {formatChatTime(message.createdAt)}
                   </span>
                 </div>
               </div>
@@ -244,14 +243,14 @@ export default function Chat({
                     {message.text}
                   </p>
                   <span className="text-xs text-slate-300">
-                    {timeAgo(message.createdAt)}
+                    {formatChatTime(message.createdAt)}
                   </span>
                 </div>
               </div>
             )
           )
         ) : (
-          <div className="text-center text-gray-500">No messages yet.</div>
+          <div className="text-center text-gray-400">No messages yet.</div>
         )}
 
         {img.url && (

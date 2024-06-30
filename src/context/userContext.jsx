@@ -75,6 +75,8 @@ export const UserProvider = ({ children }) => {
     changeBlock,
     chatId,
     setChatId,
+    setUser,
+    setCurrentUser,
     user,
     isCurrUserBloacked,
     isRecUserBloacked,
