@@ -127,7 +127,7 @@ export default function ChatList({ setIsChatListVisible }) {
   };
 
   return (
-    <div ref={chatList}>
+    <div className="overflow-y-auto" ref={chatList}>
       <div className="flex justify-between items-center gap-4 p-3">
         <div className="flex bg-slate-950/50 justify-center items-center rounded-md px-2 w-full">
           <img className="size-5" src="./search.png" alt="" />
