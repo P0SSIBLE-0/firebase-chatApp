@@ -19,6 +19,7 @@ export default function Chat({
   const [open, setOpen] = useState(false);
   const [chat, setChat] = useState();
   const [text, setText] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [img, setImg] = useState({
     file: null,
     url: "",
@@ -91,7 +92,7 @@ export default function Chat({
 
     try {
       if (img.file) {
-        imgUrl = await upload(img.file);
+        imgUrl = await upload(img.file, setUploadProgress);
       }
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
@@ -197,7 +198,7 @@ export default function Chat({
             message.senderId === currentUser.id ? (
               // Sender's side chat messages
               <div
-                className="max-w-[70%] flex-end self-end"
+                className="max-w-[70%] flex-end self-end mt-1"
                 key={message.createdAt}
               >
                 {message.img && (
@@ -211,9 +212,9 @@ export default function Chat({
                   <p className="p-2 bg-indigo-400 rounded-md rounded-tr-none">
                     {message.text}
                   </p>
-                  <span className="text-xs text-slate-300">
+                  <div className="text-right text-xs text-slate-300 my-1">
                     {formatChatTime(message.createdAt)}
-                  </span>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -253,10 +254,10 @@ export default function Chat({
           <div className="text-center text-gray-400">No messages yet.</div>
         )}
 
-        {img.url && (
-          <div className="fixed left-2 bottom-[4.5rem] lg:bottom-16 lg:left-[320px]">
+        {!isChatListVisible && img.url && (
+          <div className="fixed left-2 bottom-[4.5rem] lg:bottom-16 md:left-[38%] lg:left-1  duration-150">
             <img
-              className="h-[60px] w-[100px] rounded-md bg-cover"
+              className={`h-[60px] w-[100px] rounded-md bg-cover opacity-90 ${uploadProgress === 100 ? 'animate-none': 'animate-pulse'}`}
               src={img.url}
               alt=""
             />
